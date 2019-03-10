@@ -1,0 +1,45 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.chat-message {
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  color:#335C81;
+  opacity: 1;
+  padding: 2px;
+}
+
+.name {
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  color:#ff0000;
+  opacity: 1;
+  padding: 2px;
+}
+
+#user-id {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  opacity: 1;
+}
+
+div {
+  display: inline-block;
+}
+
+h1, h2, h3 {
+  text-align: center;
+  padding-right: 45px;
+}
+
+li {
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  padding: 2px;
+  opacity: 1;
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" ></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
+  </head>
+      <body style="background-image: url('http://i0.kym-cdn.com/entries/icons/original/000/002/232/bullet_cat.jpg');
+      background-repeat: no-repeat; background-size: 100%; overflow: hidden;" >
+      <h1>{{ title }} Chat App</h1>
+      <div id="chat-area" style="background-color: rgba(255, 255, 255, 0.4);
+        position: absolute; overflow-y: auto; float: left; width: 50%; height: 50%;"/>
+        <div id="input" style="float: left;">
+        <form id="messageForm">
+        <textarea id="message" style="position: fixed; top:65%; width: 44%; height: 25px; resize: none; font-size: 16px;"></textarea>
+        <input type="submit" value="Send" id="input" style="position: fixed; top: 65%; left: 46%; font-size: 20px;" />
+        </form>
+      </div>
+    <script>
+        var connectionLength = 0;
+        document.addEventListener("DOMContentLoaded", function(event) { 
+            var socket = io.connect(); 
+            var $messageForm = $("#messageForm"); 
+            var $message = $("#message"); 
+            var $chat = $("#chat-area");
+            var $user = $("#listUsers");
+            var $name = $("#name");
+            var person = '';
+            
+            // This prompt new user for name
+            if(person == ''){
+              person = prompt("Please enter your name!");
+              document.getElementById("welcome").innerHTML = person;
+              socket.emit('newName', person);
+              console.log(person);
+            }
+            
+          // Sends message to the server
+            $messageForm.submit(function(e) {
+                e.preventDefault();
+                console.log("about to submit:  message: " +  $message.val()); 
+                socket.emit('send message',{message: $message.val(), name: person});
+                $message.val('');
+            }); 
+          
+          // Gets list of names that are on the chat app and makes list
+             socket.on('list', function(namePerson) {
+             var text, i, x;
+             var temp = new Array();
+
+              text = "<ul>";
+              for (i = 0; i < namePerson.length; i++)
+                  text += "<li>" + namePerson[i] + "</li>";
+                  text += "</ul>";
+              document.getElementById("listUsers").innerHTML = text;
+              document.getElementById("numUsers").innerHTML = namePerson.length;
+             });
+            
+          // Gets new message from the server and displays it on the app
+            socket.on('new message', function(data) {
+              console.log("connection"); 
+              $chat.append('<div class=name>' + data.name + '</div>: <div class=chat-message>' + data.message + '</div><BR><BR>');
+             });
+        });
+    </script>
+    </div>
+    <div class="users", style="float: right;">
+    <h2 >Connected users<h2 id="numUsers" />0</h2>
+    <h2>User Name of Chat app<h2 id="welcome" /></h2>
+    <h2> List of Users: </h2>
+    <ul id="listUsers" />
+    </div>
+  </body>
+</html>
